@@ -5,22 +5,21 @@
 // 目标API地址
 const apiUrl = 'https://www.myfitnesspal.com/api/idm/user-with-consents';
 
-/*
+// 1. GET请求：保留请求动作，注释domainUserId提取步骤
 let domainUserId = '';
 const xhrGet = new XMLHttpRequest();
-xhrGet.open('GET', apiUrl, false); 
-xhrGet.withCredentials = true; 
-xhrGet.send();
-
-if (xhrGet.status === 200) {
+xhrGet.open('GET', apiUrl, false); // 同步GET请求（保留）
+xhrGet.withCredentials = true;    // 携带登录态Cookie（保留）
+xhrGet.send();                    // 执行GET请求（保留）
+// 提取domainUserId步骤：已注释，暂不解析响应取值
+/* if (xhrGet.status === 200) {
   const resData = JSON.parse(xhrGet.responseText);
-  domainUserId = resData.domainUserId; 
-}
-*/
-  
+  domainUserId = resData.domainUserId;
+} */
 
-const domainUserId = "1234567890"; 
-if (domainUserId && domainUserId !== "Your_domainUserId") { 
+// 2. PATCH请求：固定domainUserId为1234567890，直接发起请求
+domainUserId = "1234567890"; // 固定赋值为1234567890（覆盖原有空值）
+if (domainUserId) {
   const xhrPatch = new XMLHttpRequest();
   xhrPatch.open('PATCH', apiUrl, true);
   xhrPatch.withCredentials = true;
@@ -29,7 +28,7 @@ if (domainUserId && domainUserId !== "Your_domainUserId") {
     "account_links": [
       {
         "domain":"MFP",
-        "domainUserId": domainUserId,
+        "domainUserId": domainUserId, // 使用固定值1234567890
         "consent_matrix_version":"nc.20250403.01",
         "consents":{"transfer_outside_location":true},
         "ad_consents_last_seen":"2026-01-23T11:23:23.942Z"
